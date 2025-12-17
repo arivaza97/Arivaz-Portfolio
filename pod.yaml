@@ -27,6 +27,6 @@ spec:
     spec:
       containers:
         - name: hello
-          image: arivaza97/ArivazPortfolio:latest
+          image: arivaza97/arivazportfolio:v1
           imagePullPolicy: Always
 

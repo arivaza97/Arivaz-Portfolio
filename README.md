@@ -52,15 +52,17 @@ Generate a access Classic token from the GitHub Repo Settings
 
 ### Create a Pipeline Job 
 
-Install Stageview plugin from manageJenkins -> Plugins -> Available plugins
+Install Stage view plugin from manageJenkins -> Plugins -> Available plugins
 
 pipeline {
     agent any
     stages {
         stage('Pull Code From GitHub') {
+             stage('Pull Code From GitHub') {
             steps {
-                git 'https://github.com/arivaza97/Arivaz-Portfolio.git'
+               git branch: 'main', url: 'https://github.com/arivaza97/Arivaz-Portfolio.git'
             }
+        }
         }
     }
 }
@@ -93,15 +95,15 @@ pipeline {
         }
         stage('Build the Docker image') {
             steps {
-                sh 'sudo docker build -t ArivazPortfolio /var/lib/jenkins/workspace/weekendproj'
-                sh 'sudo docker tag ArivazPortfolio arivaza97/ArivazPortfolio:latest'
-                sh 'sudo docker tag ArivazPortfolio arivaza97/ArivazPortfolio:${BUILD_NUMBER}'
+                sh 'sudo docker build -t arivazportfolio /var/lib/jenkins/workspace/arivazportfolio'
+                sh 'sudo docker tag arivazportfolio iammithran/arivazportfolio:latest'
+                sh 'sudo docker tag arivazportfolio iammithran/arivazportfolio:${BUILD_NUMBER}'
             }
         }
         stage('Push the Docker image') {
             steps {
-                sh 'sudo docker image push arivaza97/ArivazPortfolio:latest'
-                sh 'sudo docker image push arivaza97/ArivazPortfolio:${BUILD_NUMBER}'
+                sh 'sudo docker image push iammithran/arivazportfolio:latest'
+                sh 'sudo docker image push iammithran/arivazportfolio:${BUILD_NUMBER}'
             }
         }
     }
@@ -138,13 +140,13 @@ ssh-keygen
 
 export AWS_ACCESS_KEY_ID=
 export AWS_SECRET_ACCESS_KEY=
-export NAME=**mithran**.k8s.local
-export KOPS_STATE_STORE=s3://**kops22042022**
+export NAME=arivaz.k8s.local
+export KOPS_STATE_STORE=s3://arivaz.k8s.local
 
 ### Create Kubernetes Cluster
 
 kops create cluster --zones ap-south-1a ${NAME}
-kops update cluster --name mithran.k8s.local --yes --admin
+kops update cluster --name arivaz.k8s.local --yes --admin
 
 ## Step 6: Deploy to kubernetes
 
@@ -161,20 +163,20 @@ pipeline {
         }
         stage('Build the Docker image') {
             steps {
-                sh 'sudo docker build -t ArivazPortfolio /var/lib/jenkins/workspace/weekendproj'
-                sh 'sudo docker tag ArivazPortfolio arivaza97/ArivazPortfolio:latest'
-                sh 'sudo docker tag ArivazPortfolio arivaza97/ArivazPortfolio:${BUILD_NUMBER}'
+                sh 'sudo docker build -t arivazportfolio /var/lib/jenkins/workspace/weekendproj'
+                sh 'sudo docker tag arivazportfolio arivaza97/arivazportfolio:latest'
+                sh 'sudo docker tag arivazportfolio arivaza97/arivazportfolio:${BUILD_NUMBER}'
             }
         }
         stage('Push the Docker image') {
             steps {
-                sh 'sudo docker image push arivaza97/ArivazPortfolio:latest'
-                sh 'sudo docker image push arivaza97/ArivazPortfolio:${BUILD_NUMBER}'
+                sh 'sudo docker image push arivaza97/arivazportfolio:latest'
+                sh 'sudo docker image push arivaza97/arivazportfolio:${BUILD_NUMBER}'
             }
         }
         stage('Deploy on Kubernetes') {
             steps {
-                sh 'sudo kubectl apply -f /var/lib/jenkins/workspace/weekendproj/pod.yaml'
+                sh 'sudo kubectl apply -f pod.yaml'
                 sh 'sudo kubectl rollout restart deployment loadbalancer-pod'
             }
         }

@@ -42,7 +42,7 @@ pipeline {
         }
         stage('Deployment to Container') {
             steps {
-               sh "docker run -d -p 8081:80 arivuboi27/arivazportfolio:v1"
+               sh "docker run -d arivuboi27/arivazportfolio:v1"
             }
         }
     }

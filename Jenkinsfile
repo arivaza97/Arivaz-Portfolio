@@ -40,12 +40,10 @@ pipeline {
                }
             }
         }
-        stage('Deploy on Kubernetes') {
+        stage('Deployment to Container') {
             steps {
-                sh 'sudo kubectl apply -f pod.yaml'
-                sh 'sudo kubectl rollout restart deployment loadbalancer-pod'
+               sh "docker run -d -p 8081:80 arivuboi27/arivazportfolio:v1"
             }
         }
-        
     }
 }
